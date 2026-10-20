@@ -47,4 +47,4 @@ Export the regions another tool masked as `{"frames/0001.jpg": [[x1, y1, x2, y2]
 
 ## Status
 
-Collection has started. No results are published yet; this file will link to them when they are.
+Collection has started. Until it is done, plate results on a held-out split of public Indian plate datasets are in [train/README.md](../train/README.md). That split is phone photos of mostly parked vehicles and has no face labels, so it does not replace this test set.

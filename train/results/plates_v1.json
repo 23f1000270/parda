@@ -1,0 +1,332 @@
+{
+ "test": {
+  "stock_640": {
+   "model": "plate-yolov9t-640",
+   "thresh": 0.2,
+   "tiles": false,
+   "images": 650,
+   "plates": 718,
+   "protected_80": 0.7883008356545961,
+   "protected_95": 0.7172701949860725,
+   "over_mask": 0.01188769180435953,
+   "recall_iou50": 0.8133704735376045,
+   "precision_iou50": 0.7913279132791328,
+   "ms_per_image": 100.24937030923095,
+   "by_size": {
+    "small": {
+     "n": 299,
+     "protected_80": 0.8762541806020067
+    },
+    "large": {
+     "n": 363,
+     "protected_80": 0.6887052341597796
+    },
+    "tiny": {
+     "n": 56,
+     "protected_80": 0.9642857142857143
+    }
+   },
+   "by_source": {
+    "ayan": {
+     "n": 365,
+     "protected_80": 0.9616438356164384
+    },
+    "bharani": {
+     "n": 344,
+     "protected_80": 0.5988372093023255
+    },
+    "i5hub": {
+     "n": 9,
+     "protected_80": 1.0
+    }
+   }
+  },
+  "stock_384": {
+   "model": "plate-yolov9t-384",
+   "thresh": 0.2,
+   "tiles": false,
+   "images": 650,
+   "plates": 718,
+   "protected_80": 0.8147632311977716,
+   "protected_95": 0.7325905292479109,
+   "over_mask": 0.015260763833637203,
+   "recall_iou50": 0.8272980501392758,
+   "precision_iou50": 0.7694300518134715,
+   "ms_per_image": 45.796343186151574,
+   "by_size": {
+    "small": {
+     "n": 299,
+     "protected_80": 0.8996655518394648
+    },
+    "large": {
+     "n": 363,
+     "protected_80": 0.7272727272727273
+    },
+    "tiny": {
+     "n": 56,
+     "protected_80": 0.9285714285714286
+    }
+   },
+   "by_source": {
+    "ayan": {
+     "n": 365,
+     "protected_80": 0.9808219178082191
+    },
+    "bharani": {
+     "n": 344,
+     "protected_80": 0.6337209302325582
+    },
+    "i5hub": {
+     "n": 9,
+     "protected_80": 1.0
+    }
+   }
+  },
+  "indian_384": {
+   "model": "plate-indian-yolo11n-384.onnx",
+   "thresh": 0.05,
+   "tiles": false,
+   "margin": 0.12,
+   "images": 650,
+   "plates": 718,
+   "protected_80": 0.8788300835654597,
+   "protected_95": 0.7381615598885793,
+   "over_mask": 0.015293997012374612,
+   "recall_iou50": 0.8927576601671309,
+   "precision_iou50": 0.6547497446373851,
+   "ms_per_image": 40.35240386153768,
+   "by_size": {
+    "small": {
+     "n": 299,
+     "protected_80": 0.9431438127090301
+    },
+    "large": {
+     "n": 363,
+     "protected_80": 0.8181818181818182
+    },
+    "tiny": {
+     "n": 56,
+     "protected_80": 0.9285714285714286
+    }
+   },
+   "by_source": {
+    "ayan": {
+     "n": 365,
+     "protected_80": 0.9698630136986301
+    },
+    "bharani": {
+     "n": 344,
+     "protected_80": 0.7790697674418605
+    },
+    "i5hub": {
+     "n": 9,
+     "protected_80": 1.0
+    }
+   }
+  },
+  "stock_640_thorough": {
+   "model": "plate-yolov9t-640",
+   "thresh": 0.2,
+   "tiles": true,
+   "images": 650,
+   "plates": 718,
+   "protected_80": 0.8272980501392758,
+   "protected_95": 0.7311977715877437,
+   "over_mask": 0.01290459012462492,
+   "recall_iou50": 0.8579387186629527,
+   "precision_iou50": 0.5398773006134969,
+   "ms_per_image": 516.0859474138459,
+   "by_size": {
+    "small": {
+     "n": 299,
+     "protected_80": 0.8963210702341137
+    },
+    "large": {
+     "n": 363,
+     "protected_80": 0.7493112947658402
+    },
+    "tiny": {
+     "n": 56,
+     "protected_80": 0.9642857142857143
+    }
+   },
+   "by_source": {
+    "ayan": {
+     "n": 365,
+     "protected_80": 0.9808219178082191
+    },
+    "bharani": {
+     "n": 344,
+     "protected_80": 0.6598837209302325
+    },
+    "i5hub": {
+     "n": 9,
+     "protected_80": 1.0
+    }
+   }
+  },
+  "stock_384_thorough": {
+   "model": "plate-yolov9t-384",
+   "thresh": 0.2,
+   "tiles": true,
+   "images": 650,
+   "plates": 718,
+   "protected_80": 0.8495821727019499,
+   "protected_95": 0.7576601671309192,
+   "over_mask": 0.1848301170184989,
+   "recall_iou50": 0.8495821727019499,
+   "precision_iou50": 0.1390154968094804,
+   "ms_per_image": 467.72722885384536,
+   "by_size": {
+    "small": {
+     "n": 299,
+     "protected_80": 0.9163879598662207
+    },
+    "large": {
+     "n": 363,
+     "protected_80": 0.7796143250688705
+    },
+    "tiny": {
+     "n": 56,
+     "protected_80": 0.9464285714285714
+    }
+   },
+   "by_source": {
+    "ayan": {
+     "n": 365,
+     "protected_80": 0.989041095890411
+    },
+    "bharani": {
+     "n": 344,
+     "protected_80": 0.6976744186046512
+    },
+    "i5hub": {
+     "n": 9,
+     "protected_80": 1.0
+    }
+   }
+  },
+  "indian_384_thorough": {
+   "model": "plate-indian-yolo11n-384.onnx",
+   "thresh": 0.05,
+   "tiles": true,
+   "tile_thresh": 0.5,
+   "margin": 0.12,
+   "images": 650,
+   "plates": 718,
+   "protected_80": 0.8857938718662952,
+   "protected_95": 0.7479108635097493,
+   "over_mask": 0.017793031241432035,
+   "recall_iou50": 0.915041782729805,
+   "precision_iou50": 0.38219895287958117,
+   "ms_per_image": 341.2308712676951,
+   "by_size": {
+    "small": {
+     "n": 299,
+     "protected_80": 0.9431438127090301
+    },
+    "large": {
+     "n": 363,
+     "protected_80": 0.8319559228650137
+    },
+    "tiny": {
+     "n": 56,
+     "protected_80": 0.9285714285714286
+    }
+   },
+   "by_source": {
+    "ayan": {
+     "n": 365,
+     "protected_80": 0.9726027397260274
+    },
+    "bharani": {
+     "n": 344,
+     "protected_80": 0.7906976744186046
+    },
+    "i5hub": {
+     "n": 9,
+     "protected_80": 1.0
+    }
+   }
+  }
+ },
+ "validation_threshold_choice": {
+  "stock_384": {
+   "thresh": 0.2,
+   "protected_80": 0.8310249307479224,
+   "over_mask": 0.016739886169215033,
+   "precision_iou50": 0.8203753351206434
+  },
+  "indian_384_t0.05": {
+   "thresh": 0.05,
+   "protected_80": 0.8836565096952909,
+   "over_mask": 0.01308918709443928,
+   "precision_iou50": 0.6540755467196819
+  },
+  "indian_384_t0.08": {
+   "thresh": 0.08,
+   "protected_80": 0.8725761772853186,
+   "over_mask": 0.011958791663455705,
+   "precision_iou50": 0.7403189066059226
+  },
+  "indian_384_t0.1": {
+   "thresh": 0.1,
+   "protected_80": 0.8698060941828255,
+   "over_mask": 0.011520758659809656,
+   "precision_iou50": 0.7677725118483413
+  },
+  "indian_384_t0.15": {
+   "thresh": 0.15,
+   "protected_80": 0.853185595567867,
+   "over_mask": 0.011034499841136807,
+   "precision_iou50": 0.8174807197943444
+  },
+  "indian_384_t0.2": {
+   "thresh": 0.2,
+   "protected_80": 0.8337950138504155,
+   "over_mask": 0.010537533432335934,
+   "precision_iou50": 0.8497267759562842
+  },
+  "plate-yolov9t-384_thorough": {
+   "thresh": 0.2,
+   "protected_80": 0.8836565096952909,
+   "over_mask": 0.15363820145977097,
+   "precision_iou50": 0.16728232189973616
+  },
+  "plate-yolov9t-640_thorough": {
+   "thresh": 0.2,
+   "protected_80": 0.8559556786703602,
+   "over_mask": 0.011115797936332788,
+   "precision_iou50": 0.5487804878048781
+  },
+  "indian_384_thorough_tile0.2": {
+   "thresh": 0.05,
+   "tile_thresh": 0.2,
+   "protected_80": 0.9030470914127424,
+   "over_mask": 0.022323283047076,
+   "precision_iou50": 0.2717741935483871
+  },
+  "indian_384_thorough_tile0.3": {
+   "thresh": 0.05,
+   "tile_thresh": 0.3,
+   "protected_80": 0.9002770083102493,
+   "over_mask": 0.01819680705182627,
+   "precision_iou50": 0.3180952380952381
+  },
+  "indian_384_thorough_tile0.4": {
+   "thresh": 0.05,
+   "tile_thresh": 0.4,
+   "protected_80": 0.889196675900277,
+   "over_mask": 0.016829456108764983,
+   "precision_iou50": 0.3533190578158458
+  },
+  "indian_384_thorough_tile0.5": {
+   "thresh": 0.05,
+   "tile_thresh": 0.5,
+   "protected_80": 0.889196675900277,
+   "over_mask": 0.014932245388254016,
+   "precision_iou50": 0.3942652329749104
+  }
+ },
+ "note": "Test: 650 images, 718 plates. Validation: 324 images, 361 plates. Times on a 2-core cloud CPU."
+}

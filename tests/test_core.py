@@ -155,3 +155,35 @@ def test_pipeline_fails_closed():
     a = Anonymizer(Config(), face_detector=_Fake(boom=True), plate_detector=_Fake())
     res = a.process(img)
     assert res.failsafe and res.image.max() < 50
+
+
+def test_plate_threshold_comes_from_the_model_registry():
+    from parda import models
+    assert models.DEFAULT_PLATE == "plate-indian-yolo11n-384"
+    assert models.plate_thresh_for("plate-indian-yolo11n-384") == 0.05
+    assert models.plate_tile_thresh_for("plate-indian-yolo11n-384") == 0.5
+    assert models.plate_thresh_for("plate-yolov9t-640") == models.FALLBACK_PLATE_THRESH
+    assert models.plate_thresh_for("my_model.onnx") == models.FALLBACK_PLATE_THRESH
+
+
+def test_tiles_use_the_stricter_threshold():
+    import numpy as np
+    from parda.detect import PlateDetector
+
+    class _Fixed(PlateDetector):
+        def __init__(self):  # no ONNX session needed
+            self.size, self.pad_value, self.nms_thresh, self.tiled = 64, 114, 0.5, True
+            self.score_thresh, self.tile_thresh = 0.05, 0.5
+
+        def _infer(self, square):
+            # one weak and one strong box, in every pass
+            return (np.array([[2, 2, 10, 10], [20, 20, 40, 30]], np.float32), np.array([0.1, 0.9], np.float32))
+
+    # A 128x64 frame: one whole-frame pass at half scale plus tiles at x=0 and x=64.
+    dets = _Fixed().detect(np.zeros((64, 128, 3), np.uint8))
+    weak = [d for d in dets if d.score < 0.5]
+    strong = [d for d in dets if d.score >= 0.5]
+    # The weak box comes only from the whole-frame pass (scaled by 2); no tile adds one.
+    assert len(weak) == 1 and weak[0].box[0] < 32
+    # Strong boxes come from the tiles too (the second tile's sits at x=84).
+    assert any(d.box[0] >= 64 for d in strong)

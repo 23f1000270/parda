@@ -44,7 +44,7 @@
 
   <section class="notes">
     <h2>What happens to your picture</h2>
-    <p>Two small neural networks run inside this tab: YuNet finds faces and a YOLOv9 model finds number plates. Each one is drawn over with a coarse grid of averaged colour plus random noise. Plain blur can be partly reversed by AI tools; a six-cell grid leaves nothing to recover.</p>
+    <p>Two small neural networks run inside this tab: YuNet finds faces and a YOLO11n model we fine-tuned on Indian plates finds number plates. Each one is drawn over with a coarse grid of averaged colour plus random noise. Plain blur can be partly reversed by AI tools; a six-cell grid leaves nothing to recover.</p>
     <p>When a face or plate disappears for a moment, Parda keeps covering where it was for a few more frames and makes the cover a little bigger each time. If a model crashes, the whole frame goes dark rather than showing anything unmasked.</p>
     <p>Saved videos have no sound. This page sends no picture data anywhere: open your browser's network panel and check.</p>
     <p class="quiet">Photos get a full scan: the whole picture, then full-resolution tiles to catch small faces in crowds and distant plates. Camera and video use one fast pass per frame so they keep up. For long videos, the command-line tool does the full scan on every frame.</p>
@@ -52,7 +52,7 @@
 </main>
 
 <footer class="foot">
-  <p>Models: YuNet (OpenCV Zoo, MIT) and YOLOv9-t plate detector (open-image-models, MIT). Parda is Apache-2.0.</p>
+  <p>Models: YuNet (OpenCV Zoo, MIT) and a YOLO11n plate detector fine-tuned on public Indian plate datasets (AGPL-3.0). Parda's code is Apache-2.0.</p>
 </footer>
 
 <script type="module" src="app.js"></script>

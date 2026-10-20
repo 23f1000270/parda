@@ -12,7 +12,7 @@ Good open tools for this already exist, such as Meta's [EgoBlur](https://github.
 
 ## What it does
 
-* **Finds faces and plates on-device.** YuNet for faces and a YOLOv9-t model for plates, both running on ONNX Runtime. Nothing leaves the machine.
+* **Finds faces and plates on-device.** YuNet for faces and a YOLO11n plate model we fine-tuned on Indian plates, both running on ONNX Runtime. Nothing leaves the machine.
 * **Scans twice.** One pass over the whole frame for large objects, then full-resolution tiles so small faces in a crowd and distant plates are not shrunk to nothing. Photos in the browser get both passes; the CLI can do both on every video frame.
 * **Masks so it cannot be undone.** Blur and fine pixelation can be partly reversed by learned models ([McPherson et al., 2016](https://arxiv.org/abs/1609.00408)). Parda replaces each region with at most six cells of averaged colour plus random noise.
 * **Remembers what flickers.** Detectors miss objects for a frame or two. Parda keeps masking a lost face or plate for eight more frames, moves the mask along its last motion and grows it each frame, so uncertainty always gets a bigger mask, never a smaller one.
@@ -57,7 +57,7 @@ result = anon.process(cv2.imread("street.jpg"), use_memory=False)
 cv2.imwrite("street_safe.jpg", result.image)
 ```
 
-Every model is fetched from its upstream release and checked against a pinned SHA-256 before it is loaded. You can also pass your own model with `--plate-model my_model.onnx`; `train/finetune_plates.py` fine-tunes one on Indian plates and exports it in a format Parda reads directly.
+Every model is fetched once and checked against a pinned SHA-256 before it is loaded. You can also pass another plate model, such as `--plate-model plate-yolov9t-640` or your own `my_model.onnx`. [train/](train/README.md) has everything used to build the Indian plate model, so you can retrain it on your own data.
 
 ## How we measure it
 
@@ -68,7 +68,19 @@ Detection benchmarks reward tight boxes. Privacy asks a different question: afte
 
 Both are broken down by every label attribute: plate type and colour, vehicle, face view, object size, light and weather. Any other tool can be scored the same way from a JSON of the regions it masked. See [data/README.md](data/README.md) for the test set protocol.
 
-**Results:** our Indian roads test set is being collected and labelled now. We will publish numbers for Parda and EgoBlur here once it is done, including the cases where Parda loses.
+**First results: plates.** We fine-tuned the plate model on eight public Indian plate datasets, after removing duplicates and holding out 650 test photos (718 plates) that no copy of went into training. At the same over-mask, it protects more plates than the model it replaced:
+
+| Plate model | Protected at 80% | Large plates | Over-mask | Time per frame |
+|---|---:|---:|---:|---:|
+| YOLOv9-t 640 (previous Python default) | 78.8% | 68.9% | 1.19% | 100 ms |
+| YOLOv9-t 384 (previous browser default) | 81.5% | 72.7% | 1.53% | 46 ms |
+| **Indian YOLO11n 384 (now default)** | **87.9%** | **81.8%** | 1.53% | 40 ms |
+
+A plate counts as protected when at least 80% of it is masked. Times are per frame on a two-core cloud CPU.
+
+The biggest gain is on two-wheeler, auto and EV plates photographed up close. It is not better everywhere: on the easiest group of test photos it is a point behind. The full breakdown, the method and the limits are in [train/README.md](train/README.md).
+
+These test photos are mostly phone pictures of parked vehicles. Our own dashcam test set from Indian roads, with faces as well as plates, is being collected now. We will publish numbers for Parda and EgoBlur on it, including the cases where Parda loses.
 
 ## Known limits
 
@@ -79,8 +91,8 @@ Both are broken down by every label attribute: plate type and colour, vehicle, f
 
 ## Roadmap
 
-1. Indian roads test set and first public results.
-2. Plate model fine-tuned on Indian plates.
+1. ~~Plate model fine-tuned on Indian plates.~~ Done, see [train/README.md](train/README.md).
+2. Dashcam test set from Indian roads and results for faces and plates.
 3. Head fallback for helmeted riders and back-of-head views.
 4. Measured frame rates on Raspberry Pi 5 and NVIDIA Jetson.
 
@@ -89,11 +101,11 @@ Both are broken down by every label attribute: plate type and colour, vehicle, f
 ```
 parda/        Python package: detectors, mask memory, masks, video, live capture, benchmark
 site/         the in-browser demo (ONNX Runtime Web, no build step)
-train/        fine-tuning script for an Indian plate detector
+train/        how the Indian plate model was built: data cleaning, training, evaluation
 data/         test set protocol and labelling guide
 tests/        pytest suite
 ```
 
 ## Licence
 
-Apache-2.0 for Parda's code. The bundled models are MIT; see [NOTICE.md](NOTICE.md).
+Apache-2.0 for Parda's code. The face model and the original plate models are MIT. The fine-tuned plate model is AGPL-3.0 because it was trained with Ultralytics; `--plate-model plate-yolov9t-640` switches to an MIT model. Details and dataset credits are in [NOTICE.md](NOTICE.md).

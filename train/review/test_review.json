@@ -1,0 +1,5 @@
+{
+ "note": "Manual review of the 35 test images the stock detector matched in no rotation. Most are real plates the detector misses and stay. Six were stored sideways like the 86 fixed automatically, but the plates were too small for the detector to confirm the rotation; they are rotated 90 degrees clockwise by hand. Two have boxes that do not sit on a plate and are removed.",
+ "rotate_cw90": ["test_00394.jpg", "test_00440.jpg", "test_00474.jpg", "test_00540.jpg", "test_00559.jpg", "test_00620.jpg"],
+ "remove": ["test_00128.jpg", "test_00250.jpg"]
+}

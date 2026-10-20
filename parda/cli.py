@@ -31,7 +31,8 @@ def _common(p: argparse.ArgumentParser) -> None:
     p.add_argument("--face-model", default=models.DEFAULT_FACE)
     p.add_argument("--plate-model", default=models.DEFAULT_PLATE)
     p.add_argument("--face-thresh", type=float, default=0.4)
-    p.add_argument("--plate-thresh", type=float, default=0.2)
+    p.add_argument("--plate-thresh", type=float, default=None,
+                   help="default: the threshold registered for the plate model (0.2 for others)")
     p.add_argument("--mode", choices=["blocks", "solid", "black"], default="blocks")
     p.add_argument("--no-faces", action="store_true")
     p.add_argument("--no-plates", action="store_true")

@@ -1,0 +1,80 @@
+{
+ "sources": {
+  "aihelmet": {
+   "images": 3329,
+   "plates": 3739,
+   "classes_kept": 2,
+   "classes": 3,
+   "stretched": true
+  },
+  "ananth11": {
+   "images": 421,
+   "plates": 431,
+   "classes_kept": 1,
+   "classes": 1,
+   "stretched": true
+  },
+  "ayan": {
+   "images": 680,
+   "plates": 680,
+   "classes_kept": 1,
+   "classes": 1,
+   "stretched": false
+  },
+  "bharani": {
+   "images": 1438,
+   "plates": 1553,
+   "classes_kept": 1,
+   "classes": 1,
+   "stretched": false
+  },
+  "coep": {
+   "images": 296,
+   "plates": 296,
+   "classes_kept": 1,
+   "classes": 1,
+   "stretched": true
+  },
+  "i5hub": {
+   "images": 548,
+   "plates": 548,
+   "classes_kept": 1,
+   "classes": 1,
+   "stretched": false
+  },
+  "payal": {
+   "images": 1650,
+   "plates": 1650,
+   "classes_kept": 983,
+   "classes": 983,
+   "stretched": true
+  },
+  "quobotic": {
+   "images": 2574,
+   "plates": 2594,
+   "classes_kept": 1,
+   "classes": 1,
+   "stretched": true
+  }
+ },
+ "read": 10936,
+ "byte_unique": 10133,
+ "kept": 3841,
+ "split": {
+  "test": {
+   "images": 652,
+   "groups": 649,
+   "plates": 720
+  },
+  "val": {
+   "images": 324,
+   "groups": 317,
+   "plates": 361
+  },
+  "train": {
+   "images": 2865,
+   "groups": 1030,
+   "plates": 3100
+  }
+ }
+}

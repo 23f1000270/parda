@@ -21,7 +21,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/parda
-          key: parda-models-v1
+          key: parda-models-v2
       - name: Fetch models
         run: parda fetch-models
       - name: Run tests

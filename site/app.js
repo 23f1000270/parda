@@ -6,7 +6,9 @@ const params = new URLSearchParams(location.search);
 const ORT_BASE = params.get("ortbase") || `https://cdn.jsdelivr.net/npm/onnxruntime-web@${ORT_VERSION}/dist/`;
 
 const FACE = { url: "models/face-yunet-640.onnx", size: 640, thresh: 0.4, nms: 0.3, margin: 0.18 };
-const PLATE = { url: "models/plate-yolov9t-384.onnx", size: 384, thresh: 0.2, nms: 0.5, margin: 0.12 };
+// The Indian plate model runs at a low threshold on the whole frame and a stricter
+// one inside tiles, where it sees many more small regions (see parda/models.py).
+const PLATE = { url: "models/plate-indian-yolo11n-384.onnx", size: 384, thresh: 0.05, tileThresh: 0.5, nms: 0.5, margin: 0.12 };
 const HOLD_FRAMES = 8;
 const GROW = 0.06;
 const CELLS = 6;
@@ -156,10 +158,16 @@ async function detectPlates(src, sw, sh) {
   const t = out[plateSess.outputNames[0]];
   const d = t.data;
   const dets = [];
-  for (let i = 0; i < t.dims[0]; i++) {
-    const score = d[7 * i + 6];
+  // Two layouts: Ultralytics with NMS, (1, N, 6) rows of x1 y1 x2 y2 score class;
+  // or open-image-models end-to-end, (N, 7) rows of batch x1 y1 x2 y2 class score.
+  const ultra = t.dims.length === 3 && t.dims[2] === 6;
+  const rows = ultra ? t.dims[1] : t.dims[0];
+  const w = ultra ? 6 : 7;
+  for (let i = 0; i < rows; i++) {
+    const o = w * i + (ultra ? 0 : 1);
+    const score = d[w * i + (ultra ? 4 : 6)];
     if (score < PLATE.thresh) continue;
-    dets.push({ x1: d[7 * i + 1], y1: d[7 * i + 2], x2: d[7 * i + 3], y2: d[7 * i + 4], score, label: "plate" });
+    dets.push({ x1: d[o], y1: d[o + 1], x2: d[o + 2], y2: d[o + 3], score, label: "plate" });
   }
   return nms(dets, PLATE.nms).map((x) => unletterbox(x, lb, sw, sh));
 }
@@ -198,6 +206,7 @@ async function detectTiled(detectFn, cfg, pad, src, sw, sh) {
     tctx.drawImage(src, x0, y0, cw, ch, 0, 0, cw, ch);
     const part = await detectFn(tileCanvas, size, size);
     for (const d of part) {
+      if (cfg.tileThresh !== undefined && d.score < cfg.tileThresh) continue;
       dets.push({ ...d, x1: d.x1 + x0, y1: d.y1 + y0, x2: Math.min(sw, d.x2 + x0), y2: Math.min(sh, d.y2 + y0) });
     }
   }

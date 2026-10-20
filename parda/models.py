@@ -22,6 +22,8 @@ class ModelSpec:
     sha256: str
     license: str
     source: str
+    thresh: float | None = None  # score threshold chosen for this model, if it differs from the default
+    tile_thresh: float | None = None  # stricter threshold for the native-scale tiles, if needed
 
 
 MODELS: dict[str, ModelSpec] = {
@@ -55,10 +57,34 @@ MODELS: dict[str, ModelSpec] = {
         license="MIT",
         source="open-image-models (ankandrew)",
     ),
+    # Fine-tuned in this repo on public Indian plate datasets (see train/ and NOTICE.md).
+    # Its threshold was picked on the validation split: the lowest score at which it
+    # masks no more of the picture than the stock model does.
+    "plate-indian-yolo11n-384": ModelSpec(
+        name="plate-indian-yolo11n-384",
+        url="https://github.com/23f1000270/parda/raw/main/site/models/plate-indian-yolo11n-384.onnx",
+        sha256="087d8c83918ca4913fc8135ce15e9b0bbb8e06916229b6f39b5fc9c488c29ad7",
+        license="AGPL-3.0",
+        source="Parda, YOLO11n fine-tuned on Indian plates (Ultralytics)",
+        thresh=0.05,
+        tile_thresh=0.5,
+    ),
 }
 
 DEFAULT_FACE = "face-yunet-640"
-DEFAULT_PLATE = "plate-yolov9t-640"
+DEFAULT_PLATE = "plate-indian-yolo11n-384"
+FALLBACK_PLATE_THRESH = 0.2
+
+
+def plate_thresh_for(name_or_path: str) -> float:
+    """The score threshold to use with a plate model when the user has not set one."""
+    spec = MODELS.get(name_or_path)
+    return spec.thresh if spec and spec.thresh is not None else FALLBACK_PLATE_THRESH
+
+
+def plate_tile_thresh_for(name_or_path: str) -> float | None:
+    spec = MODELS.get(name_or_path)
+    return spec.tile_thresh if spec else None
 
 
 def cache_dir() -> Path:

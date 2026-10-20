@@ -18,7 +18,8 @@ class Config:
     face_model: str = models.DEFAULT_FACE
     plate_model: str = models.DEFAULT_PLATE
     face_thresh: float = 0.4
-    plate_thresh: float = 0.2
+    plate_thresh: float | None = None  # None: use the threshold registered for the plate model
+    plate_tile_thresh: float | None = None  # None: registered value, else same as plate_thresh
     face_tiles: bool = True        # native-scale tiles catch small faces in crowds
     plate_tiles: bool = False      # slower; turn on for distant plates in batch jobs
     face_margin: float = 0.18      # faces: hair and ears identify people too
@@ -55,7 +56,13 @@ class Anonymizer:
         if plate_detector is not None:
             self.plate = plate_detector
         elif self.cfg.plates:
-            self.plate = PlateDetector(str(models.resolve(self.cfg.plate_model)), self.cfg.plate_thresh,
+            thresh = self.cfg.plate_thresh
+            if thresh is None:
+                thresh = models.plate_thresh_for(self.cfg.plate_model)
+            tile_thresh = self.cfg.plate_tile_thresh
+            if tile_thresh is None and self.cfg.plate_thresh is None:
+                tile_thresh = models.plate_tile_thresh_for(self.cfg.plate_model)
+            self.plate = PlateDetector(str(models.resolve(self.cfg.plate_model)), thresh, tile_thresh=tile_thresh,
                                        tiled=self.cfg.plate_tiles)
         else:
             self.plate = None

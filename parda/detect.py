@@ -125,13 +125,17 @@ class _TiledDetector:
     label = ""
     pad_value = 0
 
-    def __init__(self, model_path: str, score_thresh: float, nms_thresh: float, tiled: bool):
+    def __init__(self, model_path: str, score_thresh: float, nms_thresh: float, tiled: bool,
+                 tile_thresh: float | None = None):
         self.sess = _session(model_path)
         inp = self.sess.get_inputs()[0]
         self.input_name = inp.name
         self.size = int(inp.shape[2])
         self.out_names = [o.name for o in self.sess.get_outputs()]
         self.score_thresh = score_thresh
+        # Tiles look at many more small regions, so a model run at a low threshold
+        # can be given a stricter one there to keep false alarms down.
+        self.tile_thresh = score_thresh if tile_thresh is None else max(score_thresh, tile_thresh)
         self.nms_thresh = nms_thresh
         self.tiled = tiled
 
@@ -161,16 +165,16 @@ class _TiledDetector:
                 square = np.full((self.size, self.size, 3), self.pad_value, np.uint8)
                 square[:h, :w] = img_bgr
                 b, s = self._pass(square, 1.0, (0, 0))
-                all_b.append(b)
-                all_s.append(s)
+                all_b.append(b[s >= self.tile_thresh])
+                all_s.append(s[s >= self.tile_thresh])
             else:
                 for x0, y0 in tile_origins(h, w, self.size):
                     crop = img_bgr[y0:y0 + self.size, x0:x0 + self.size]
                     square = np.full((self.size, self.size, 3), self.pad_value, np.uint8)
                     square[:crop.shape[0], :crop.shape[1]] = crop
                     b, s = self._pass(square, 1.0, (0, 0), (x0, y0))
-                    all_b.append(b)
-                    all_s.append(s)
+                    all_b.append(b[s >= self.tile_thresh])
+                    all_s.append(s[s >= self.tile_thresh])
         boxes = np.concatenate(all_b) if all_b else np.zeros((0, 4), np.float32)
         scores = np.concatenate(all_s) if all_s else np.zeros((0,), np.float32)
         keep = nms(boxes, scores, self.nms_thresh)
@@ -209,8 +213,8 @@ class PlateDetector(_TiledDetector):
     pad_value = 114
 
     def __init__(self, model_path: str, score_thresh: float = 0.2, nms_thresh: float = 0.5,
-                 tiled: bool = False):
-        super().__init__(model_path, score_thresh, nms_thresh, tiled)
+                 tiled: bool = False, tile_thresh: float | None = None):
+        super().__init__(model_path, score_thresh, nms_thresh, tiled, tile_thresh)
 
     def _infer(self, square):
         blob = square[:, :, ::-1].transpose(2, 0, 1)[None].astype(np.float32) / 255.0
