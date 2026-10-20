@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parda</title>
+<meta name="description" content="Hides faces and number plates in photos and video, in your browser. Nothing is uploaded.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%231F1D45'/%3E%3Crect x='3' y='5' width='10' height='6' fill='%23F2C318'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+  <h1 class="wordmark"><span lang="en">Parda</span> <span lang="hi" class="deva">पर्दा</span></h1>
+  <a class="repo" href="https://github.com/23f1000270/parda">Source on GitHub</a>
+</header>
+
+<main>
+  <p class="lede">Hides faces and number plates in photos and video, right here in your browser. Nothing you open leaves this device.</p>
+
+  <section class="stage" aria-label="Preview">
+    <canvas id="view" width="1280" height="720" aria-label="Blurred preview"></canvas>
+    <div id="empty" class="empty">
+      <p>Pick your camera, a photo or a video to start.</p>
+      <p class="quiet">The two detection models (8 MB) download once, then everything runs offline.</p>
+    </div>
+  </section>
+
+  <div class="controls">
+    <button id="btn-camera" type="button">Use my camera</button>
+    <label class="filebtn">Open a photo<input id="in-photo" type="file" accept="image/*"></label>
+    <label class="filebtn">Open a video<input id="in-video" type="file" accept="video/*"></label>
+    <a id="save" class="save" hidden>Save</a>
+    <label class="toggle"><input id="outline" type="checkbox" checked> Outline what was hidden</label>
+  </div>
+
+  <dl class="status" aria-live="polite">
+    <div><dt>Running on</dt><dd id="st-backend">not started</dd></div>
+    <div><dt>Speed</dt><dd id="st-fps">–</dd></div>
+    <div><dt>Hidden in this frame</dt><dd id="st-count">–</dd></div>
+  </dl>
+
+  <section class="notes">
+    <h2>What happens to your picture</h2>
+    <p>Two small neural networks run inside this tab: YuNet finds faces and a YOLOv9 model finds number plates. Each one is drawn over with a coarse grid of averaged colour plus random noise. Plain blur can be partly reversed by AI tools; a six-cell grid leaves nothing to recover.</p>
+    <p>When a face or plate disappears for a moment, Parda keeps covering where it was for a few more frames and makes the cover a little bigger each time. If a model crashes, the whole frame goes dark rather than showing anything unmasked.</p>
+    <p>Saved videos have no sound. This page sends no picture data anywhere: open your browser's network panel and check.</p>
+    <p class="quiet">Photos get a full scan: the whole picture, then full-resolution tiles to catch small faces in crowds and distant plates. Camera and video use one fast pass per frame so they keep up. For long videos, the command-line tool does the full scan on every frame.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Models: YuNet (OpenCV Zoo, MIT) and YOLOv9-t plate detector (open-image-models, MIT). Parda is Apache-2.0.</p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parda"
+version = "0.1.0"
+description = "On-device anonymisation of faces and number plates, built for Indian roads."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Divyanshu Sharma" }]
+dependencies = [
+  "numpy>=1.24",
+  "opencv-python-headless>=4.8",
+  "onnxruntime>=1.17",
+]
+
+[project.optional-dependencies]
+pi = ["picamera2"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+parda = "parda.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["parda*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
